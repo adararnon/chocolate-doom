@@ -1,22 +1,23 @@
-# Only compiles Doom
-
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := doom
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_SRC_FILES :=
-
 # SDL
-SDL_PATH := ../../SDL
-SDL_MIXER_PATH := ../../SDL_mixer
-SDL_NET_PATH := ../../SDL_net
-LOCAL_C_INCLUDES += \
+SDL_PATH := ../SDL
+SDL_MIXER_PATH := ../SDL_mixer
+SDL_NET_PATH := ../SDL_net
+LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/$(SDL_PATH)/include \
     $(LOCAL_PATH)/$(SDL_MIXER_PATH) \
     $(LOCAL_PATH)/$(SDL_NET_PATH)
+
+# SDL main
+LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c
+
+# Doom
+LOCAL_C_INCLUDES += $(LOCAL_PATH)
 
 # opl/
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/opl
@@ -183,5 +184,6 @@ LOCAL_SRC_FILES += \
     textscreen/txt_window_action.c
 
 LOCAL_SHARED_LIBRARIES := SDL2 SDL2_mixer SDL2_net
+LOCAL_LDLIBS := -lGLESv1_CM -lGLESv2 -llog
 
-#include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_SHARED_LIBRARY)
