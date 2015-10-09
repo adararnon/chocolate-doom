@@ -31,6 +31,8 @@
 #include "w_wad.h"
 #include "z_zone.h"
 
+#include "SDL_system.h"
+
 static const iwad_t iwads[] =
 {
     { "doom2.wad",    doom2,     commercial, "Doom II" },
@@ -423,6 +425,19 @@ static void CheckDOSDefaults(void)
 
 #endif
 
+#ifdef __ANDROID__
+
+static void CheckAndroid(void)
+{
+    // This is where the IWAD should be placed
+    //char* wad_dir = M_StringJoin(SDL_AndroidGetInternalStoragePath(), "/iwads");
+    char* wad_dir = M_StringDuplicate("/sdcard/dev");
+    printf("Adding WAD dir: %s", wad_dir);
+    AddIWADDir(wad_dir);
+}
+
+#endif // __ANDROID__
+
 // Returns true if the specified path is a path to a file
 // of the specified name.
 
@@ -681,6 +696,10 @@ static void BuildIWADDirList(void)
 #else
     AddXdgDirs();
 #endif
+
+#ifdef __ANDROID__
+    CheckAndroid();
+#endif // __ANDROID__
 
     // Don't run this function again.
 

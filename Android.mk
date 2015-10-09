@@ -4,17 +4,29 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := doom
 
+# Initialization
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/android
+LOCAL_CFLAGS :=
+LOCAL_SRC_FILES := 
+
+# XXX Hacks!!! XXX
+#LOCAL_CFLAGS := "-Dprintf=android_printf -Dfprintf=android_fprintf -Dvprintf=android_vprintf -Dvfprintf=android_vfprintf"
+LOCAL_CFLAGS := -Dprintf=android_printf
+LOCAL_CFLAGS += -Dfprintf=android_fprintf
+LOCAL_CFLAGS += -Dvprintf=android_vprintf
+LOCAL_CFLAGS += -Dvfprintf=android_vfprintf
+
 # SDL
 SDL_PATH := ../SDL
 SDL_MIXER_PATH := ../SDL_mixer
 SDL_NET_PATH := ../SDL_net
-LOCAL_C_INCLUDES := \
+LOCAL_C_INCLUDES += \
     $(LOCAL_PATH)/$(SDL_PATH)/include \
     $(LOCAL_PATH)/$(SDL_MIXER_PATH) \
     $(LOCAL_PATH)/$(SDL_NET_PATH)
 
 # SDL main
-LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c
+LOCAL_SRC_FILES += $(SDL_PATH)/src/main/android/SDL_android_main.c
 
 # Doom
 LOCAL_C_INCLUDES += $(LOCAL_PATH)
@@ -41,6 +53,7 @@ LOCAL_SRC_FILES += \
 # src/
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/src $(LOCAL_PATH)/src/doom
 LOCAL_SRC_FILES += \
+	src/a_log.c \
     src/aes_prng.c \
     src/deh_io.c \
     src/deh_main.c \
